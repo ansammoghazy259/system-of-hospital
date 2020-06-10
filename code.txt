@@ -1,0 +1,75 @@
+create table patients(
+patientID int primary key identity,
+name nvarchar(max),
+age int,
+gender nvarchar(max),
+address nvarchar(max),
+disease nvarchar(max),
+doctorID int
+) ;
+create table doctors(
+doctorID int primary key identity,
+name nvarchar(max),
+age int,
+gender nvarchar(max),
+address nvarchar(max) 
+);
+create table laboratory (
+labID int primary key identity,
+patientID int,
+doctorID int,
+lab_date Date,
+lab_amount int
+);
+create table inpatient(
+patientID int primary key identity,
+room_no int,
+date_of_adm Date,
+date_of_dis Date,
+lab_no int
+);
+create table outpatient(
+patientID int primary key identity,
+outpatient_date nvarchar(max),
+lab_no int
+);
+create table room (
+roomID int primary key identity,
+room_type nvarchar(max),
+room_status nvarchar(max)
+);
+create table bill(
+billID int primary key identity,
+patientid int,
+doctor_charge int,
+room_charge int,
+no_of_days int,
+lab_charge int,
+bill int
+);
+
+alter table patients  
+add foreign key (doctorID) references doctors(doctorID);
+
+alter table outpatient  
+add foreign key (lab_no) references laboratory(labID);
+
+alter table inpatient  
+add foreign key (lab_no) references laboratory(labID);
+
+alter table patients  
+add foreign key (patientID) references inpatient(patientID);
+
+alter table patients  
+add foreign key (patientID) references outpatient(patientID);
+
+alter table bill  
+add foreign key (patientid) references patients(patientID);
+
+alter table inpatient  
+add foreign key (room_no) references room(roomID);
+alter table laboratory  
+add foreign key (doctorID) references doctors(doctorID);
+
+alter table laboratory  
+add foreign key (patientID) references patients(patientID);
